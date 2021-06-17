@@ -42,7 +42,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-       - name: Install Open VPN
+      - name: Install Open VPN
         run: sudo apt-get install openvpn
 
       - name: Test
