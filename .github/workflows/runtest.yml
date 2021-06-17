@@ -21,14 +21,14 @@ jobs:
       - name: Write VPN Files
         run: |
           echo "$CA_CRT" > .github/vpn/ca.crt
-          echo "$CLIENT_CRT" > .github/vpn/client.crt
-          echo "$CLIENT_KEY" > .github/vpn/client.key
+          echo "$USER_CRT" > .github/vpn/user.crt
+          echo "$USER_KEY" > .github/vpn/user.key
           echo "$TLS_KEY" > .github/vpn/tls.key
         shell: bash
         env:
           CA_CRT: ${{ secrets.CA_CRT}}
-          CLIENT_CRT: ${{ secrets.USER_CRT }}
-          CLIENT_KEY: ${{ secrets.USER_KEY }}
+          USER_CRT: ${{ secrets.USER_CRT }}
+          USER_KEY: ${{ secrets.USER_KEY }}
           TLS_KEY: ${{ secrets.TLS_KEY }}
 
       - name: Install Open VPN
