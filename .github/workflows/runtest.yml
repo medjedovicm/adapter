@@ -10,26 +10,32 @@ jobs:
   connect-open-vpn:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Install Open VPN
-        run: sudo apt-get install openvpn
-      - name: Connect VPN
-        uses: golfzaptw/action-connect-ovpn@master
-        id: connect_vpn
+      - name: set-env-vars
+        uses: allenevans/set-env@v1.1.0
         with:
-          PING_URL: ${{ secrets.PING_URL }}
-          FILE_OVPN: '.github/vpn/config.ovpn'
-          SECRET: ${{ secrets.SECRET_USERNAME_PASSWORD }}
-          TLS_KEY: ${{ secrets.TLS_KEY }}
-        env:
           CA_CRT: ${{ secrets.CA_CRT}}
-          USER_CRT: ${{ secrets.USER_CRT }}
-          USER_KEY: ${{ secrets.USER_KEY }}
-      - name: Check Connect VPN
-        run: echo ${{ steps.connect_vpn.outputs.STATUS }}
-      - name: kill vpn
-        if: always()
-        run: sudo killall openvpn
+          CLIENT_CRT: ${{ secrets.USER_CRT }}
+          CLIENT_KEY: ${{ secrets.USER_KEY }}
+          TLS_KEY: ${{ secrets.TLS_KEY }}
+
+      - name: Write VPN Files
+        run: |
+          echo "$CA_CRT" > .github/vpn/ca.crt
+          echo "$CLIENT_CRT" > .github/vpn/client.crt
+          echo "$CLIENT_KEY" > .github/vpn/client.key
+          echo "$TLS_KEY" > .github/vpn/tls.key
+
+      - name: Install Open VPN
+        run: |
+          sudo apt install apt-transport-https
+          sudo wget https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub
+          sudo apt-key add openvpn-repo-pkg-key.pub
+          sudo wget -O /etc/apt/sources.list.d/openvpn3.list https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-bionic.list
+          sudo apt update
+          sudo apt install openvpn3
+
+      - name: Start Open VPN 3
+        run: openvpn3 session-start --config .github/vpn/config.ovpn
 
   test:
     runs-on: ubuntu-latest
