@@ -17,10 +17,9 @@ jobs:
       #     CLIENT_CRT: ${{ secrets.USER_CRT }}
       #     CLIENT_KEY: ${{ secrets.USER_KEY }}
       #     TLS_KEY: ${{ secrets.TLS_KEY }}
-
+      - uses: actions/checkout@v2
       - name: Write VPN Files
         run: |
-          ls
           echo "$CA_CRT" > .github/vpn/ca.crt
           echo "$CLIENT_CRT" > .github/vpn/client.crt
           echo "$CLIENT_KEY" > .github/vpn/client.key
@@ -57,8 +56,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Open VPN
-        run: sudo apt-get install openvpn
 
       - name: Test
         run: curl https://sas.analytium.co.uk
