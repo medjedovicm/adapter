@@ -19,9 +19,9 @@ jobs:
         with:
           PING_URL: ${{ secrets.PING_URL }}
           FILE_OVPN: '.github/vpn/config.ovpn'
-          SECRET: ${{ secrets.SECRET }}
           TLS_KEY: ${{ secrets.TLS_KEY }}
         env:
+          SECRET_USERNAME_PASSWORD: ${{ secrets.SECRET_USERNAME_PASSWORD }}
           CA_CRT: ${{ secrets.CA_CRT}}
           USER_CRT: ${{ secrets.USER_CRT }}
           USER_KEY: ${{ secrets.USER_KEY }}
