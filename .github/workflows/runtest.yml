@@ -10,13 +10,6 @@ jobs:
   connect-open-vpn:
     runs-on: ubuntu-latest
     steps:
-      # - name: set-env-vars
-      #   uses: allenevans/set-env@v1.1.0
-      #   with:
-      #     CA_CRT: ${{ secrets.CA_CRT}}
-      #     CLIENT_CRT: ${{ secrets.USER_CRT }}
-      #     CLIENT_KEY: ${{ secrets.USER_KEY }}
-      #     TLS_KEY: ${{ secrets.TLS_KEY }}
       - uses: actions/checkout@v2
       - name: Write VPN Files
         run: |
@@ -43,19 +36,5 @@ jobs:
       - name: Start Open VPN 3
         run: openvpn3 session-start --config .github/vpn/config.ovpn
 
-  test:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Test
+      - name: Open SAS trough VPN
         run: curl https://sas.analytium.co.uk
